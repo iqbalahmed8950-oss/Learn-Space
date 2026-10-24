@@ -1,0 +1,1291 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Courses | LearnSpace Elite Skeuomorphic Edition</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Skeuomorphic Base & Textures */
+            --bg-base: #18191c;
+            --bg-leather: #212328;
+            --surface-plate: #282b30;
+            --surface-plate-light: #32363d;
+            
+            /* Gold & Metallic Accents */
+            --gold-light: #f7e092;
+            --gold-mid: #d4af37;
+            --gold-dark: #8c6d1f;
+            --gold-deep: #59430c;
+            
+            --metal-shine: linear-gradient(135deg, #444952 0%, #22252a 50%, #15171a 100%);
+            --gold-gradient: linear-gradient(135deg, #ffe082 0%, #d4af37 45%, #997316 80%, #59430c 100%);
+            --gold-gradient-hover: linear-gradient(135deg, #fff1b8 0%, #e6be44 45%, #b3871d 80%, #735710 100%);
+            --gold-bevel-border: linear-gradient(135deg, #fff3a8 0%, #a68124 50%, #3a2a07 100%);
+
+            /* Text Colors */
+            --text-main: #f0f2f5;
+            --text-muted: #9fa6b2;
+            --text-gold: #e6be44;
+
+            /* Skeuomorphic Multi-layered Shadows & Bevels */
+            --skeuo-raised: 
+                6px 10px 20px rgba(0, 0, 0, 0.65), 
+                -3px -3px 8px rgba(255, 255, 255, 0.06),
+                inset 1px 1px 1px rgba(255, 255, 255, 0.2),
+                inset -1px -1px 2px rgba(0, 0, 0, 0.8);
+
+            --skeuo-raised-hover: 
+                10px 18px 30px rgba(0, 0, 0, 0.85), 
+                -4px -4px 12px rgba(255, 255, 255, 0.09),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.35),
+                inset -1px -1px 3px rgba(0, 0, 0, 0.9);
+
+            --skeuo-inset: 
+                inset 3px 4px 8px rgba(0, 0, 0, 0.85),
+                inset -2px -2px 6px rgba(255, 255, 255, 0.05),
+                1px 1px 2px rgba(255, 255, 255, 0.08);
+
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            /* Subtle dark textured background pattern */
+            background-image: 
+                radial-gradient(rgba(212, 175, 55, 0.05) 1px, transparent 0),
+                radial-gradient(rgba(255, 255, 255, 0.02) 1px, var(--bg-base) 0);
+            background-size: 24px 24px, 12px 12px;
+            background-position: 0 0, 6px 6px;
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+            cursor: default;
+        }
+
+        /* Hide default cursor on desktop for custom interactive cursor */
+        @media (min-width: 992px) {
+            body, button, a, input {
+                cursor: none !important;
+            }
+        }
+
+        /* Custom Interactive Tracker (Cursor) */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold-mid);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--gold-light);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        .cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s ease-out, height 0.25s ease-out, border-color 0.25s, background-color 0.25s;
+            box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.2);
+        }
+
+        .cursor-hover .cursor-dot {
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+        }
+
+        .cursor-hover .cursor-ring {
+            width: 54px;
+            height: 54px;
+            border-color: var(--gold-mid);
+            background: rgba(212, 175, 55, 0.12);
+        }
+
+        /* Skeuomorphic Plate Card */
+        .skeuo-card {
+            background: var(--metal-shine);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--skeuo-raised);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Metallic Highlight Edge Overlay */
+        .skeuo-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 224, 130, 0.4), transparent);
+            opacity: 0.6;
+        }
+
+        .skeuo-card:hover {
+            transform: translateY(-6px) rotateX(2deg) rotateY(-1deg);
+            box-shadow: var(--skeuo-raised-hover);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.02em;
+            color: var(--text-main);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .gold-gradient-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.9));
+        }
+
+        /* Mechanical 3D Gold Button */
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #111;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.9rem 2.2rem;
+            border-radius: 50px;
+            border: 1px solid #ffe89e;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7rem;
+            box-shadow: 
+                0 6px 14px rgba(0, 0, 0, 0.6),
+                inset 0 2px 2px rgba(255, 255, 255, 0.8),
+                inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+            position: relative;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+            user-select: none;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-gradient-hover);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 20px rgba(212, 175, 55, 0.35),
+                0 6px 12px rgba(0, 0, 0, 0.7),
+                inset 0 2px 3px rgba(255, 255, 255, 0.9),
+                inset 0 -3px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-gold:active {
+            transform: translateY(2px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.8),
+                inset 0 3px 6px rgba(0, 0, 0, 0.7),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Skeuomorphic Metallic Outline Button */
+        .btn-outline {
+            background: linear-gradient(180deg, #2f333a 0%, #1e2024 100%);
+            color: var(--gold-light);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.8rem 1.6rem;
+            border-radius: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.15),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.6);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gold-mid);
+            color: #ffffff;
+            background: linear-gradient(180deg, #3a3f48 0%, #25282e 100%);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 16px rgba(0,0,0,0.7),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:active {
+            transform: translateY(1px);
+            box-shadow: var(--skeuo-inset);
+        }
+
+        /* Navbar Frame */
+        .navbar-container {
+            position: fixed;
+            top: 1.5rem;
+            left: 5%;
+            right: 5%;
+            z-index: 1000;
+        }
+
+        .navbar {
+            background: linear-gradient(180deg, #2b2e34 0%, #1c1e22 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.8);
+            border-radius: 50px;
+            padding: 0.75rem 2rem;
+            box-shadow: 
+                0 12px 28px rgba(0, 0, 0, 0.8),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-emblem {
+            width: 38px;
+            height: 38px;
+            background: var(--gold-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111;
+            font-size: 1.1rem;
+            box-shadow: 
+                inset 0 2px 2px rgba(255,255,255,0.7),
+                inset 0 -2px 3px rgba(0,0,0,0.6),
+                0 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--gold-light);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+        }
+
+        /* Header / Page Banner */
+        .page-header {
+            padding: 11rem 6% 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: 3.25rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 680px;
+            margin: 0 auto 3rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+        }
+
+        /* Search & Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 1.2rem 1.6rem 1.2rem 3.6rem;
+            background: #141517;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 50px;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            box-shadow: var(--skeuo-inset);
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 
+                inset 3px 4px 10px rgba(0, 0, 0, 0.95),
+                0 0 12px rgba(212, 175, 55, 0.25);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-mid);
+            font-size: 1.2rem;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8));
+        }
+
+        .categories-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Skeuomorphic Metallic Category Chips */
+        .category-chip {
+            padding: 0.75rem 1.8rem;
+            background: linear-gradient(180deg, #2a2d33 0%, #1e2024 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .category-chip:hover {
+            color: var(--gold-light);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 14px rgba(0,0,0,0.7),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .category-chip.active {
+            background: var(--gold-gradient);
+            color: #111;
+            border-color: #ffe082;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 6px 16px rgba(212, 175, 55, 0.3),
+                inset 0 2px 2px rgba(255, 255, 255, 0.8),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Course Grid Section */
+        .courses-section {
+            padding: 0 6% 8rem;
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .course-card {
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .course-card.hidden {
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .course-badge {
+            background: #141517;
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: var(--skeuo-inset);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            font-size: 0.8rem;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 800;
+        }
+
+        .course-title {
+            font-size: 1.35rem;
+            margin-bottom: 0.85rem;
+            line-height: 1.4;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+        }
+
+        .course-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.6;
+        }
+
+        /* Inset Metallic Divider Strip */
+        .course-info {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.75rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+            font-weight: 600;
+        }
+
+        .course-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-info i {
+            color: var(--gold-mid);
+        }
+
+        .course-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-price {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold-light);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        }
+
+        /* Empty State */
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results i {
+            font-size: 3.5rem;
+            color: var(--gold-dark);
+            margin-bottom: 1rem;
+        }
+
+        /* Skeuomorphic Modal Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 11, 13, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: linear-gradient(145deg, #2b2e35 0%, #1a1c20 100%);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 520px;
+            padding: 2.5rem;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.9),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #15171a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--skeuo-inset);
+        }
+
+        .modal-close:hover {
+            color: #fff;
+            border-color: var(--gold-mid);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(180deg, #2b2e34 0%, #1c1e22 100%);
+            border: 1px solid var(--gold-mid);
+            color: #fff;
+            padding: 1rem 1.75rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            z-index: 3000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #1c1e22 0%, #121315 100%);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.8);
+            padding: 5rem 6% 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            margin-top: 1.25rem;
+            margin-bottom: 1.75rem;
+            font-size: 0.95rem;
+            max-width: 320px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #2a2d33 0%, #1a1c1f 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-light);
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.6),
+                inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .social-icons a:hover {
+            color: #ffffff;
+            border-color: var(--gold-mid);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 16px rgba(0,0,0,0.8),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .footer-col h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold-light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.85rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .newsletter-form input {
+            padding: 0.9rem 1.25rem;
+            background: #141517;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.95rem;
+            font-family: inherit;
+            box-shadow: var(--skeuo-inset);
+        }
+
+        .newsletter-form input:focus {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #1c1e22;
+                border: 1px solid rgba(212, 175, 55, 0.3);
+                border-radius: 20px;
+                padding: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 0.8rem;
+                display: none;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            }
+            .nav-links.show { display: flex; }
+            .navbar-container { top: 1rem; }
+            .page-header h1 { font-size: 2.25rem; }
+            .courses-grid, .footer-container { grid-template-columns: 1fr; }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Interactive Cursor Elements -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Skeuomorphic Navbar -->
+    <div class="navbar-container">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <div class="logo-emblem"><i class="fa-solid fa-graduation-cap"></i></div>
+                <span class="gold-gradient-text">LearnSpace</span>
+            </a>
+            <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" class="active">Explore Courses</a></li>
+                <li><a href="Learning Paths.html">Learning Paths</a></li>
+                <li><a href="About.html">About</a></li>
+            </ul>
+            <a href="#courses" class="btn-gold" style="padding: 0.65rem 1.6rem; font-size: 0.85rem;">Get Started</a>
+        </nav>
+    </div>
+
+    <!-- Header & Search Controls -->
+    <header class="page-header">
+        <h1 class="gold-gradient-text">Elite Masterclasses</h1>
+        <p>Tactile digital learning curated by industry leaders. Refine your expertise through precision-engineered curricula and interactive mentorship.</p>
+
+        <div class="filter-controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search masterclasses, topics, or mentors...">
+            </div>
+
+            <div class="categories-grid" id="categoryChips">
+                <button class="category-chip active" data-category="all">All Masterclasses</button>
+                <button class="category-chip" data-category="development">Development</button>
+                <button class="category-chip" data-category="design">Design</button>
+                <button class="category-chip" data-category="data">Data & AI</button>
+                <button class="category-chip" data-category="business">Business</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Course Catalog Grid -->
+    <main id="courses" class="courses-section">
+        <div class="courses-grid" id="coursesGrid">
+
+            <!-- Course 1 -->
+            <div class="skeuo-card course-card" data-category="development" data-title="high-performance frontend systems react architecture" data-description="master component isolation complex state orchestration render optimization scale">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-code"></i> Development</span>
+                        <span>Advanced</span>
+                    </div>
+                    <h3 class="course-title">High-Performance Frontend Systems & React Architecture</h3>
+                    <p class="course-description">Master component isolation, complex state orchestration, and render optimization at enterprise scale.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 10 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Expert</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$1,250</span>
+                        <button class="btn-outline enroll-btn" data-title="High-Performance Frontend Systems & React Architecture" data-price="$1,250">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 2 -->
+            <div class="skeuo-card course-card" data-category="design" data-title="3d ui ux tactile skeuomorphism claymorphism design" data-description="craft soft tactile digital interfaces utilizing dual-shadow depth organic shapes light cues">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-pen-nib"></i> Design</span>
+                        <span>Intermediate</span>
+                    </div>
+                    <h3 class="course-title">3D UI/UX & Tactical Skeuomorphism Design</h3>
+                    <p class="course-description">Craft tactile digital interfaces utilizing multi-layered shadows, metallic depth, specular highlights, and ambient light cues.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 8 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Intermediate</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$980</span>
+                        <button class="btn-outline enroll-btn" data-title="3D UI/UX & Tactical Skeuomorphism Design" data-price="$980">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 3 -->
+            <div class="skeuo-card course-card" data-category="data" data-title="artificial intelligence predictive analytics engineering machine learning" data-description="deploy custom machine learning models neural pipelines real-time predictive infrastructure">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-brain"></i> Data & AI</span>
+                        <span>Advanced</span>
+                    </div>
+                    <h3 class="course-title">Artificial Intelligence & Predictive Analytics</h3>
+                    <p class="course-description">Deploy custom machine learning models, neural pipelines, and real-time predictive data infrastructure.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 14 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Expert</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$1,600</span>
+                        <button class="btn-outline enroll-btn" data-title="Artificial Intelligence & Predictive Analytics" data-price="$1,600">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 4 -->
+            <div class="skeuo-card course-card" data-category="business" data-title="venture growth technology product leadership strategy executive" data-description="strategic product positioning unit economics optimization leadership tech executives">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-chart-line"></i> Business</span>
+                        <span>Executive</span>
+                    </div>
+                    <h3 class="course-title">Venture Growth & Product Leadership</h3>
+                    <p class="course-description">Strategic product positioning, unit economics optimization, and organizational leadership for technology executives.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 6 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Executive</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$1,400</span>
+                        <button class="btn-outline enroll-btn" data-title="Venture Growth & Product Leadership" data-price="$1,400">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 5 -->
+            <div class="skeuo-card course-card" data-category="development" data-title="distributed systems backend cloud infrastructure microservices" data-description="architect fault tolerant microservices resilient apis containerized cloud deployment routines">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-server"></i> Development</span>
+                        <span>Intermediate</span>
+                    </div>
+                    <h3 class="course-title">Distributed Systems & Backend Cloud Infrastructure</h3>
+                    <p class="course-description">Architect fault-tolerant microservices, resilient APIs, and containerized cloud deployment routines.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 12 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Intermediate</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$1,350</span>
+                        <button class="btn-outline enroll-btn" data-title="Distributed Systems & Backend Cloud Infrastructure" data-price="$1,350">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 6 -->
+            <div class="skeuo-card course-card" data-category="design" data-title="design systems multi-brand token architecture ui typography" data-description="build scalable design tokens systematic ui components multi platform design governance">
+                <div>
+                    <div class="course-meta">
+                        <span class="course-badge"><i class="fa-solid fa-layer-group"></i> Design</span>
+                        <span>Advanced</span>
+                    </div>
+                    <h3 class="course-title">Design Systems & Multi-Brand Token Architecture</h3>
+                    <p class="course-description">Build scalable design tokens, systematic UI components, and multi-platform design governance systems.</p>
+                </div>
+                <div>
+                    <div class="course-info">
+                        <span><i class="fa-regular fa-clock"></i> 7 Weeks</span>
+                        <span><i class="fa-solid fa-signal"></i> Expert</span>
+                    </div>
+                    <div class="course-price-row">
+                        <span class="course-price">$1,100</span>
+                        <button class="btn-outline enroll-btn" data-title="Design Systems & Multi-Brand Token Architecture" data-price="$1,100">Enroll Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty Search Results -->
+            <div class="no-results" id="noResults">
+                <i class="fa-solid fa-compass"></i>
+                <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--gold-light);">No Masterclasses Found</h3>
+                <p style="color: var(--text-muted);">Try adjusting your search criteria or explore other categories.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Skeuomorphic Enrollment Modal -->
+    <div class="modal-overlay" id="enrollModal">
+        <div class="modal-card">
+            <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div class="logo-emblem" style="margin: 0 auto 1rem; width: 50px; height: 50px; font-size: 1.5rem;">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h3 class="gold-gradient-text" style="font-size: 1.6rem; margin-bottom: 0.4rem;">Confirm Enrollment</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">You are reserving a seat for this executive masterclass.</p>
+            </div>
+
+            <div style="background: #141517; padding: 1.25rem; border-radius: 16px; box-shadow: var(--skeuo-inset); margin-bottom: 1.5rem;">
+                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--gold-mid); font-weight: 700; margin-bottom: 0.3rem;">Selected Track</div>
+                <div id="modalCourseTitle" style="font-weight: 700; color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">Course Title</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.5rem; margin-top: 0.5rem;">
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">Tuition Fee</span>
+                    <span id="modalCoursePrice" style="color: var(--gold-light); font-weight: 800; font-family: 'Cinzel', serif; font-size: 1.2rem;">$0</span>
+                </div>
+            </div>
+
+            <form id="enrollForm" onsubmit="event.preventDefault(); submitEnrollment();">
+                <div style="margin-bottom: 1rem;">
+                    <input type="text" placeholder="Full Name" required style="width: 100%; padding: 0.9rem 1.2rem; background: #141517; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #fff; font-family: inherit; outline: none; box-shadow: var(--skeuo-inset);">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <input type="email" placeholder="Professional Email Address" required style="width: 100%; padding: 0.9rem 1.2rem; background: #141517; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: #fff; font-family: inherit; outline: none; box-shadow: var(--skeuo-inset);">
+                </div>
+                <button type="submit" class="btn-gold" style="width: 100%;">Complete Reservation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" style="color: var(--gold-mid); font-size: 1.2rem;"></i>
+        <span id="toastMessage">Action completed successfully.</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <div class="logo-emblem"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <span class="gold-gradient-text">LearnSpace</span>
+                </a>
+                <p>The premier luxury online academy for high-achieving professionals seeking uncompromising instruction and career impact.</p>
+                <div class="social-icons">
+                    <a href="#" aria-label="X Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Academy</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Explore Courses</a></li>
+                    <li><a href="#">Learning Paths</a></li>
+                    <li><a href="#">Mentorship Track</a></li>
+                    <li><a href="#">Certifications</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Leadership</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press & Media</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Stay Updated</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Subscribe to receive exclusive masterclass invitations and industry insights.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); subscribeNewsletter();">
+                    <input type="email" id="newsletterEmail" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn-gold" style="justify-content: center; padding: 0.85rem;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 LearnSpace Academy. All rights reserved.</p>
+            <div style="display: flex; gap: 2rem;">
+                <a href="#" style="color: var(--text-muted); text-decoration: none;">Privacy Policy</a>
+                <a href="#" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* ----------------------------------------------------
+             * 1. Smooth Interactive Cursor Tracker (Physics Lag)
+             * ---------------------------------------------------- */
+            const cursorDot = document.getElementById('cursorDot');
+            const cursorRing = document.getElementById('cursorRing');
+
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let ringX = mouseX;
+            let ringY = mouseY;
+
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                // Immediate move for center dot
+                cursorDot.style.left = `${mouseX}px`;
+                cursorDot.style.top = `${mouseY}px`;
+            });
+
+            // Smooth trailing effect for ring
+            function animateCursor() {
+                ringX += (mouseX - ringX) * 0.15;
+                ringY += (mouseY - ringY) * 0.15;
+
+                cursorRing.style.left = `${ringX}px`;
+                cursorRing.style.top = `${ringY}px`;
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover state expansions
+            const hoverTargets = document.querySelectorAll('button, a, input, .skeuo-card, .category-chip');
+            hoverTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+
+            // Click pressure pulse effect
+            window.addEventListener('mousedown', () => {
+                cursorRing.style.transform = 'translate(-50%, -50%) scale(0.75)';
+            });
+            window.addEventListener('mouseup', () => {
+                cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+
+            /* ----------------------------------------------------
+             * 2. Live Filtering & Category Selection Logic
+             * ---------------------------------------------------- */
+            const searchInput = document.getElementById('searchInput');
+            const categoryChips = document.querySelectorAll('.category-chip');
+            const courseCards = document.querySelectorAll('.course-card');
+            const noResults = document.getElementById('noResults');
+
+            let currentCategory = 'all';
+            let searchQuery = '';
+
+            function filterCourses() {
+                let visibleCount = 0;
+
+                courseCards.forEach(card => {
+                    const cardCategory = card.dataset.category;
+                    const cardTitle = card.dataset.title;
+                    const cardDesc = card.dataset.description;
+
+                    const matchesCategory = (currentCategory === 'all' || cardCategory === currentCategory);
+                    const matchesSearch = !searchQuery || cardTitle.includes(searchQuery) || cardDesc.includes(searchQuery);
+
+                    if (matchesCategory && matchesSearch) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    noResults.classList.add('visible');
+                } else {
+                    noResults.classList.remove('visible');
+                }
+            }
+
+            categoryChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    categoryChips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentCategory = chip.dataset.category;
+                    filterCourses();
+                });
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value.toLowerCase().trim();
+                filterCourses();
+            });
+
+            /* ----------------------------------------------------
+             * 3. Modal Dialog & Enrollment Handling
+             * ---------------------------------------------------- */
+            const enrollModal = document.getElementById('enrollModal');
+            const modalClose = document.getElementById('modalClose');
+            const modalCourseTitle = document.getElementById('modalCourseTitle');
+            const modalCoursePrice = document.getElementById('modalCoursePrice');
+            const enrollBtns = document.querySelectorAll('.enroll-btn');
+
+            enrollBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const title = btn.dataset.title;
+                    const price = btn.dataset.price;
+
+                    modalCourseTitle.textContent = title;
+                    modalCoursePrice.textContent = price;
+                    enrollModal.classList.add('active');
+                });
+            });
+
+            modalClose.addEventListener('click', () => {
+                enrollModal.classList.remove('active');
+            });
+
+            enrollModal.addEventListener('click', (e) => {
+                if (e.target === enrollModal) {
+                    enrollModal.classList.remove('active');
+                }
+            });
+
+            window.submitEnrollment = function() {
+                enrollModal.classList.remove('active');
+                showToast(`Enrollment successful for ${modalCourseTitle.textContent}!`);
+            };
+
+            window.subscribeNewsletter = function() {
+                const input = document.getElementById('newsletterEmail');
+                if (input.value) {
+                    showToast('Thank you for subscribing to LearnSpace insights.');
+                    input.value = '';
+                }
+            };
+
+            /* ----------------------------------------------------
+             * 4. Toast Notification Utility
+             * ---------------------------------------------------- */
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            let toastTimer;
+
+            function showToast(msg) {
+                toastMessage.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3500);
+            }
+
+            /* ----------------------------------------------------
+             * 5. Mobile Navigation Menu Toggle
+             * ---------------------------------------------------- */
+            const menuBtn = document.getElementById('menuBtn');
+            const navLinks = document.getElementById('navLinks');
+
+            menuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('show');
+            });
+        });
+    </script>
+</body>
+</html>
